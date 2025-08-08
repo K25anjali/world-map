@@ -1,16 +1,3 @@
-// export const markersData = [
-//     { name: "United States", latLng: [37.0902, -95.7129], style: { fill: "#d84ef2" } },
-//     { name: "Brazil", latLng: [-14.235, -51.9253], style: { fill: "#6f4ef2" } },
-//     { name: "South Africa", latLng: [-30.5595, 22.9375], style: { fill: "#f2c94e" } },
-//     { name: "Algeria", latLng: [28.0339, 1.6596], style: { fill: "#8af24e" } },
-//     { name: "Canada", latLng: [56.1304, -106.3468], style: { fill: "#cb76b9" } },
-//     { name: "United Kingdom", latLng: [54.3781, -3.4360], style: { fill: "#ff4e4e" } },
-//     { name: "Russia - West", latLng: [46.7558, 43.5173], style: { fill: "#6ed997" } },
-//     { name: "Russia - East", latLng: [61.5264, 69.1962], style: { fill: "#25f1de" } },
-//     { name: "Indonesia", latLng: [-4.7893, 107.9213], style: { fill: "#f27d4e" } },
-//     { name: "Australia", latLng: [-21.2744, 135.7751], style: { fill: "#4e89f2" } },
-// ];
-
 export const markersData = [
     {
         name: "United States",
