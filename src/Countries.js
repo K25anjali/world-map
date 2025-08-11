@@ -3,7 +3,7 @@ export const markersData = [
         name: "United States",
         code: "US",
         latLng: [37.0902, -95.7129],
-        style: { fill: "#d84ef2" },
+        style: { image: createMarkerSvg("#d84ef2"), r: 8 },
         flagUrl: "https://flagcdn.com/us.svg",
         totalReduction: "-72%",
         baseYear: "2005",
@@ -14,7 +14,7 @@ export const markersData = [
         name: "Brazil",
         code: "BR",
         latLng: [-14.235, -51.9253],
-        style: { fill: "#6f4ef2" },
+        style: { image: createMarkerSvg("#6f4ef2"), r: 8 },
         flagUrl: "https://flagcdn.com/br.svg",
         totalReduction: "-68%",
         baseYear: "2000",
@@ -25,7 +25,7 @@ export const markersData = [
         name: "South Africa",
         code: "ZA",
         latLng: [-30.5595, 22.9375],
-        style: { fill: "#f2c94e" },
+        style: { image: createMarkerSvg("#f2c94e"), r: 8 },
         flagUrl: "https://flagcdn.com/za.svg",
         totalReduction: "-65%",
         baseYear: "1990",
@@ -36,7 +36,7 @@ export const markersData = [
         name: "Algeria",
         code: "DZ",
         latLng: [28.0339, 1.6596],
-        style: { fill: "#8af24e" },
+        style: { image: createMarkerSvg("#8af24e"), r: 8 },
         flagUrl: "https://flagcdn.com/dz.svg",
         totalReduction: "-70%",
         baseYear: "2005",
@@ -47,7 +47,7 @@ export const markersData = [
         name: "Canada",
         code: "CA",
         latLng: [56.1304, -106.3468],
-        style: { fill: "#cb76b9" },
+        style: { image: createMarkerSvg("#cb76b9"), r: 8 },
         flagUrl: "https://flagcdn.com/ca.svg",
         totalReduction: "-75%",
         baseYear: "2005",
@@ -58,7 +58,7 @@ export const markersData = [
         name: "United Kingdom",
         code: "GB",
         latLng: [54.3781, -3.4360],
-        style: { fill: "#ff4e4e" },
+        style: { image: createMarkerSvg("#ff4e4e"), r: 8 },
         flagUrl: "https://flagcdn.com/gb.svg",
         totalReduction: "-80%",
         baseYear: "1990",
@@ -69,7 +69,7 @@ export const markersData = [
         name: "Russia - West",
         code: "RU",
         latLng: [46.7558, 43.5173],
-        style: { fill: "#6ed997" },
+        style: { image: createMarkerSvg("#6ed997"), r: 8 },
         flagUrl: "https://flagcdn.com/ru.svg",
         totalReduction: "-60%",
         baseYear: "1990",
@@ -80,7 +80,7 @@ export const markersData = [
         name: "Russia - East",
         code: "RU",
         latLng: [61.5264, 69.1962],
-        style: { fill: "#25f1de" },
+        style: { image: createMarkerSvg("#25f1de"), r: 8 },
         flagUrl: "https://flagcdn.com/ru.svg",
         totalReduction: "-55%",
         baseYear: "2000",
@@ -91,7 +91,7 @@ export const markersData = [
         name: "Indonesia",
         code: "ID",
         latLng: [-4.7893, 107.9213],
-        style: { fill: "#f27d4e" },
+        style: { image: createMarkerSvg("#f27d4e"), r: 8 },
         flagUrl: "https://flagcdn.com/id.svg",
         totalReduction: "-50%",
         baseYear: "2005",
@@ -102,7 +102,7 @@ export const markersData = [
         name: "Australia",
         code: "AU",
         latLng: [-21.2744, 135.7751],
-        style: { fill: "#4e89f2" },
+        style: { image: createMarkerSvg("#4e89f2"), r: 8 },
         flagUrl: "https://flagcdn.com/au.svg",
         totalReduction: "-65%",
         baseYear: "2005",
@@ -110,7 +110,6 @@ export const markersData = [
         relTo2023: "-35%"
     }
 ];
-
 export const countries = {
     AF: 33, AL: 33, DZ: 33, AS: 33, AD: 33, AO: 33, AI: 33, AQ: 33, AG: 33,
     AR: 33, AM: 33, AW: 33, AU: 33, AT: 33, AZ: 33, BS: 33, BH: 33, BD: 33,
@@ -151,3 +150,20 @@ markerCountries.forEach(code => {
         countries[code] = 69;
     }
 });
+
+
+
+// Function to create a custom SVG data URL for each marker
+export function createMarkerSvg(fillColor) {
+    const svg = `
+     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <!-- Colored circle -->
+      <circle cx="12" cy="12" r="10" fill="${fillColor}" stroke="#000" stroke-width="0" />
+      <!-- Black plus icon with shorter lines -->
+      <path d="M8 12h8" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 8v8" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    `;
+    // Convert SVG to data URL
+    return `data:image/svg+xml;base64,${btoa(svg)}`;
+}
