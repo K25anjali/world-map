@@ -8,7 +8,7 @@ const MarkerTooltip = ({ marker }) => {
   if (!marker) return null;
 
   return (
-    <div className="fixed right-2 top-24 sm:right-[2%] sm:top-[20%] w-[90%] sm:w-[380px] max-h-[80vh] bg-white rounded-xl shadow-lg font-sans overflow-y-auto z-50 p-4">
+    <div className="fixed right-2 top-24 sm:right-[2%] sm:top-[20%] w-[90%] sm:w-[380px] max-h-[80vh] bg-gray-100 rounded-xl shadow-lg font-sans overflow-y-auto z-50 p-4">
       {/* Header */}
       <div className="pb-2">
         <div className="flex items-center gap-2 flex-wrap">
