@@ -1,13 +1,89 @@
+import React, { useState } from "react";
 import { VectorMap } from "@react-jvectormap/core";
 import { worldMill } from "@react-jvectormap/world";
-import React from "react";
 import { countries, markersData } from "./Countries";
+import { ChartLine } from "lucide-react";
 
-function App() {
+const MarkerTooltip = ({ marker }) => {
+  if (!marker) return null;
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-[#d2ebf2] px-10 ">
-      <h1 className="text-6xl font-semibold mt-10 mb-8">Country Climate Ambiton</h1>
+    <div className="fixed right-[2%] top-[20%] h-auto w-[380px] bg-white rounded-xl shadow-lg font-sans overflow-y-auto z-50">
+      {/* Header */}
+      <div className="p-4 pb-1">
+        <div className="flex items-center gap-2">
+          {marker.flagUrl && (
+            <img src={marker.flagUrl} alt="flag" className="w-8 h-6 rounded-sm" />
+          )}
+          <span className="font-semibold text-lg">{marker.name || marker.code}</span>
+        </div>
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-xl font-bold">Total GHG Emissions Reductions</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <circle cx="12" cy="12" r="10" strokeWidth="2" fill="none"></circle>
+            <line x1="12" y1="8" x2="12" y2="12" strokeWidth="2"></line>
+            <circle cx="12" cy="16" r="1" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <p className="text-sm text-gray-500">via CGS High Ambition Pathways</p>
+      </div>
+
+      {/* Including LULUCF */}
+      <div className="px-4 pt-0 pb-4">
+        <div className="mb-2 border-b border-gray-200">
+          <span className="bg-[#297cbb] text-white text-xs font-medium px-2 py-0.5 rounded">
+            Including LULUCF
+          </span>
+          <div className="flex items-center justify-between mt-1">
+            <div className="text-5xl font-bold text-black flex items-center gap-1">
+              {marker.totalReduction || "-74%"}
+              <span className="ml-1 text-2xl text-green-600"><ChartLine /></span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-1 mb-2">
+            <p className="text-xs text-gray-500">
+              NDC Base Year or Estimated Peak Year
+            </p>
+            <p className="text-base font-semibold">{marker.baseYear || "2005"}</p>
+          </div>
+        </div>
+
+        {/* Excluding LULUCF */}
+        <div className="pt-1 pb-3 border-b border-gray-200 mt-2">
+          <span className="bg-[#eccf2e] text-black text-xs font-medium px-2 py-0.5 rounded">
+            Excluding LULUCF
+          </span>
+          <div className="grid grid-cols-2 text-sm mt-2">
+            <p className="text-gray-700">Relative to 2005</p>
+            <p className="font-semibold text-right">{marker.relTo2005 || "-34%"}</p>
+            <p className="text-gray-700">Relative to 2023</p>
+            <p className="font-semibold text-right">{marker.relTo2023 || "-44%"}</p>
+          </div>
+        </div>
+
+        {/* Button */}
+        <button className="w-full mt-3 bg-black text-white py-2 rounded-md font-semibold hover:bg-gray-900 transition">
+          View Details →
+        </button>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  const [hoveredMarker, setHoveredMarker] = useState(null);
+
+  return (
+    <div className="w-full h-screen overflow-hidden bg-[#d2ebf2] relative">
+      <h1 className="text-6xl font-semibold mt-10 mb-8 pl-10">
+        Country Climate Ambition
+      </h1>
       <div className="mx-auto w-full h-[80vh]">
         <VectorMap
           map={worldMill}
@@ -17,24 +93,9 @@ function App() {
           }}
           backgroundColor="#d2ebf2"
           markers={markersData}
-
           markerStyle={{
-            initial: {
-              fill: '#000',
-              stroke: '#000',
-              'stroke-width': 0,
-              r: 8, // hide circle radius
-              marker: {
-                tagName: 'path',
-                attrs: {
-                  d: 'M4 0 L4 8 M0 4 L8 4', // plus sign lines
-                  stroke: '#000',
-                  'stroke-width': 2,
-                },
-              },
-            },
+            initial: { fill: "#000", stroke: "#000", "stroke-width": 0, r: 8 },
           }}
-
           series={{
             regions: [
               {
@@ -45,116 +106,13 @@ function App() {
               },
             ],
           }}
-          onRegionTipShow={function reginalTip(event, label, code) {
-            return label.html(`
-                  <div style="background-color: black; border-radius: 6px; min-height: 50px; width: 125px; color: white"; padding-left: 10px>
-                    <p>
-                    <b>
-                    ${label.html()}
-                    </b>
-                    </p>
-                    <p>
-                    ${countries[code]}
-                    </p>
-                    </div>`);
-          }}
-          onMarkerTipShow={(event, label, index) => {
-            const marker = markersData[index]; // get marker data by index
-
-            if (!marker) return;
-
-            label.html(`
-              <div style="
-                background-color: white; 
-                border-radius: 6px; 
-                min-height: 150px; 
-                width: 300px; 
-                color: black; 
-                padding: 12px; 
-                font-family: Arial, sans-serif;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-              ">
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                  ${marker.flagUrl
-                ? `<img src="${marker.flagUrl}" alt="flag" style="width:24px; height:16px; border-radius:2px; margin-right:8px;" />`
-                : ''
-              }
-                  <span style="font-weight: 700; font-size: 16px;">${marker.name || marker.code}</span>
-                </div>
-                
-                <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">
-                  Total GHG Emissions Reductions
-                </div>
-                <div style="font-size: 12px; color: #555; margin-bottom: 10px;">
-                  via CGS High Ambition Pathways
-                </div>
-        
-                <div style="
-                  background-color: 'white'; 
-                  color: white; 
-                  padding: 2px 6px; 
-                  border-radius: 3px; 
-                  font-size: 12px; 
-                  display: inline-block; 
-                  margin-bottom: 10px;
-                  font-weight: 600;
-                ">
-                  Including LULUCF
-                </div>
-        
-                <div style="font-size: 28px; font-weight: 900; color: #000; display: flex; align-items: center; margin-bottom: 8px;">
-                  ${marker.totalReduction || '-74%'}
-                  <span style="color: #16a34a; margin-left: 6px; font-size: 18px;">⬆️</span>
-                </div>
-        
-                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
-                  <div><strong>NDC Base Year or Estimated Peak Year</strong></div>
-                  <div>${marker.baseYear || '2005'}</div>
-                </div>
-        
-                <hr style="border: none; border-top: 1px solid #eee; margin: 8px 0;" />
-        
-                <div style="
-                  background-color: 'white'; 
-                  color: #000; 
-                  padding: 2px 6px; 
-                  border-radius: 3px; 
-                  font-size: 12px; 
-                  display: inline-block; 
-                  margin-bottom: 8px;
-                  font-weight: 600;
-                ">
-                  Excluding LULUCF
-                </div>
-        
-                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                  <div>Relative to 2005</div>
-                  <div><strong>${marker.relTo2005 || '-34%'}</strong></div>
-                </div>
-        
-                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 12px;">
-                  <div>Relative to 2023</div>
-                  <div><strong>${marker.relTo2023 || '-44%'}</strong></div>
-                </div>
-        
-                <button style="
-                  width: 100%; 
-                  background-color: #000; 
-                  color: #fff; 
-                  padding: 8px 0; 
-                  border: none; 
-                  border-radius: 4px; 
-                  font-weight: 600; 
-                  cursor: pointer;
-                  font-size: 14px;
-                ">
-                  View Details →
-                </button>
-              </div>
-            `);
-          }}
+          onMarkerOver={(e, index) => setHoveredMarker(markersData[index])}
+          onMarkerOut={() => setHoveredMarker(null)}
         />
       </div>
+
+      {/* Fixed Tooltip */}
+      <MarkerTooltip marker={hoveredMarker} />
     </div>
   );
 }
